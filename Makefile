@@ -4,7 +4,7 @@ all: staticperl32 shpreload32.so staticperl64 shpreload64.so
 
 PERL_CCOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ccopts)
 PERL_LDOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ldopts)
-PERL_VER=$(shell sh staticperl$(BIT) perl -e "print($])")
+PERL_VER=$(shell sh staticperl$(BIT) perl -e "print($$])")
 
 shpreload32.so:
 	BIT=32 M32_OPT=-m32  make shpreload.so

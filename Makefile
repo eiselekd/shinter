@@ -7,15 +7,15 @@ PERL_LDOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ldopts)
 
 shpreload32.so:
 	( BIT=32 M32_OPT=-m32  make shpreload.so ) 2>&1 | tee shpreload32.so.compile.txt
-	mkdir -p          rel/$(shell sh staticperl32 perl -e "print($$])")
-	cp shpreload32.so rel/$(shell sh staticperl32 perl -e "print($$])")/shpreload32.so
-	strip --strip-all rel/$(shell sh staticperl32 perl -e "print($$])")/shpreload32.so
+	mkdir -p          rel/$$(sh staticperl32 perl -e "print($$])")
+	cp shpreload32.so rel/$$(sh staticperl32 perl -e "print($$])")/shpreload32.so
+	strip --strip-all rel/$$(sh staticperl32 perl -e "print($$])")/shpreload32.so
 
 shpreload64.so:
 	( BIT=64 M32_OPT=      make shpreload.so ) 2>&1 | tee shpreload64.so.compile.txt
-	mkdir -p          rel/$(shell sh staticperl64 perl -e "print($$])")
-	cp shpreload64.so rel/$(shell sh staticperl64 perl -e "print($$])")/shpreload64.so
-	strip --strip-all rel/$(shell sh staticperl64 perl -e "print($$])")/shpreload64.so
+	mkdir -p          rel/$$(sh staticperl64 perl -e "print($$])")
+	cp shpreload64.so rel/$$(sh staticperl64 perl -e "print($$])")/shpreload64.so
+	strip --strip-all rel/$$(sh staticperl64 perl -e "print($$])")/shpreload64.so
 
 shpreload.so: shpreload.c
 	@echo "sh staticperl$(BIT) perl ccopts: $(PERL_CCOPTS)"

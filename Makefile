@@ -6,14 +6,14 @@ PERL_CCOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ccopts)
 PERL_LDOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ldopts)
 
 shpreload32.so:
-	BIT=32 M32_OPT=-m32  make shpreload.so
-	mkdir -p rel/$(PERL_VER)
+	( BIT=32 M32_OPT=-m32  make shpreload.so ) 2>&1 | tee shpreload32.so.compile.txt
+	mkdir -p          rel/$(shell sh staticperl32 perl -e "print($$])")
 	cp shpreload32.so rel/$(shell sh staticperl32 perl -e "print($$])")/shpreload32.so
 	strip --strip-all rel/$(shell sh staticperl32 perl -e "print($$])")/shpreload32.so
 
 shpreload64.so:
-	BIT=64 M32_OPT=      make shpreload.so
-	mkdir -p rel/$(PERL_VER)
+	( BIT=64 M32_OPT=      make shpreload.so ) 2>&1 | tee shpreload64.so.compile.txt
+	mkdir -p          rel/$(shell sh staticperl64 perl -e "print($$])")
 	cp shpreload64.so rel/$(shell sh staticperl64 perl -e "print($$])")/shpreload64.so
 	strip --strip-all rel/$(shell sh staticperl64 perl -e "print($$])")/shpreload64.so
 
@@ -25,10 +25,10 @@ shpreload.so: shpreload.c
 ########################
 
 staticperl32:
-	BIT=32 M32_OPT=-m32  make staticperl
+	(BIT=32 M32_OPT=-m32  make staticperl ) 2>&1 | tee staticperl32.compile.txt
 
 staticperl64:
-	BIT=64 M32_OPT=      make staticperl
+	(BIT=64 M32_OPT=      make staticperl ) 2>&1 | tee staticperl64.compile.txt
 
 staticperl:
 	rm -f staticperl$(BIT)
@@ -52,4 +52,6 @@ test64:
 clean:
 	rm staticperl32 staticperl64
 
-.PHONY: shpreload32.so shpreload64.so staticperl32 staticperl64 shpreload.so staticperl test64
+.PHONY: shpreload32.so shpreload64.so staticperl32 staticperl64 shpreload.so staticperl test64 \
+	shpreload32.so.compile.txt shpreload64.so.compile.txt \
+	staticperl32.compile.txt staticperl64.compile.txt

@@ -7,3 +7,6 @@ Trace execve via LD_PRELOAD
  - uses embedded static perl and executes shpreload.pm::execve_() on execve calls
  - precompiled so in rel/*
 
+Build:
+
+$ make all

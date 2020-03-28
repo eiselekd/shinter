@@ -4,19 +4,18 @@ all: staticperl32 shpreload32.so staticperl64 shpreload64.so
 
 PERL_CCOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ccopts)
 PERL_LDOPTS=$(shell sh staticperl$(BIT) perl -MExtUtils::Embed -e ldopts)
-PERL_VER=$(shell sh staticperl$(BIT) perl -e "print($$])")
 
 shpreload32.so:
 	BIT=32 M32_OPT=-m32  make shpreload.so
 	mkdir -p rel/$(PERL_VER)
-	cp shpreload32.so rel/$(PERL_VER)/shpreload32.so
-	strip --strip-all rel/$(PERL_VER)/shpreload32.so
+	cp shpreload32.so rel/$(shell sh staticperl32 perl -e "print($$])")/shpreload32.so
+	strip --strip-all rel/$(shell sh staticperl32 perl -e "print($$])")/shpreload32.so
 
 shpreload64.so:
 	BIT=64 M32_OPT=      make shpreload.so
 	mkdir -p rel/$(PERL_VER)
-	cp shpreload64.so rel/$(PERL_VER)/shpreload64.so
-	strip --strip-all rel/$(PERL_VER)/shpreload64.so
+	cp shpreload64.so rel/$(shell sh staticperl64 perl -e "print($$])")/shpreload64.so
+	strip --strip-all rel/$(shell sh staticperl64 perl -e "print($$])")/shpreload64.so
 
 shpreload.so: shpreload.c
 	@echo "sh staticperl$(BIT) perl ccopts: $(PERL_CCOPTS)"
